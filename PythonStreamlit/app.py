@@ -27,13 +27,6 @@ else:
         st.error("No file uploaded and default file path not found.")
         st.stop()
 
-required_columns = ["Order Date", "Category", "Sales", "Profit", "Quantity", "Segment", "Sub-Category"]
-
-if not all(column in df.columns for column in required_columns):
-    missing_columns = [column for column in required_columns if column not in df.columns]
-    st.error(f"The uploaded file is missing the following required columns: {', '.join(missing_columns)}")
-    st.stop()
-
 col1, col2 = st.columns(2)
 
 # Convert 'Order Date' to datetime if it exists
@@ -194,4 +187,3 @@ if 'Order Date' in df.columns:
     st.download_button('Download Data', data=csv, file_name="Data.csv", mime="text/csv")
 else:
     st.warning("Order Date column is missing. Time Series Analysis and related visualizations are disabled.")
-
