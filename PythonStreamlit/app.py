@@ -27,6 +27,13 @@ else:
         st.error("No file uploaded and default file path not found.")
         st.stop()
 
+required_columns = ["Order Date", "Region", "State", "City", "Category", "Sales", "Profit", "Quantity", "Segment", "Sub-Category"]
+
+if not all(column in df.columns for column in required_columns):
+    missing_columns = [column for column in required_columns if column not in df.columns]
+    st.error(f"The uploaded file is missing the following required columns: {', '.join(missing_columns)}")
+    st.stop()
+
 col1, col2 = st.columns(2)
 df["Order Date"] = pd.to_datetime(df["Order Date"])
 
@@ -120,7 +127,7 @@ with st.expander("View Data of TimeSeries:"):
     csv = linechart.to_csv(index=False).encode("utf-8")
     st.download_button('Download Data', data=csv, file_name="TimeSeries.csv", mime='text/csv')
 
-# Create a treem based on Region, category, sub-Category
+# Create a treemap based on Region, category, sub-Category
 st.subheader("Hierarchical view of Sales using TreeMap")
 fig3 = px.treemap(filtered_df, path=["Region", "Category", "Sub-Category"], values="Sales", hover_data=["Sales"],
                   color="Sub-Category")
