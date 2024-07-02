@@ -24,9 +24,16 @@ embarked = st.select_slider("Did they Embark?", ['S', 'C', 'Q'])
 def predict(): 
     row = np.array([passengerid, pclass, name, sex, age, sibsp, parch, ticket, fare, cabin, embarked]) 
     X = pd.DataFrame([row], columns=columns)
+    
+    # Initialize and fit the preprocessor
     preprocessor = PrepProcesor()
+    preprocessor.fit(X)  # Fit with your data
+    
+    # Transform the data and make predictions
     X_processed = preprocessor.transform(X)
     prediction = model.predict(X_processed)
+    
+    # Display prediction result
     if prediction[0] == 1: 
         st.success('Passenger Survived :thumbsup:')
     else: 

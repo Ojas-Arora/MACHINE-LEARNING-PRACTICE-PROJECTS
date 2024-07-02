@@ -7,11 +7,11 @@ class PrepProcesor(BaseEstimator, TransformerMixin):
         self.ageImputer = SimpleImputer(strategy='mean')
         
     def fit(self, X, y=None): 
-        self.ageImputer.fit(X[['Age']])        
+        self.ageImputer.fit(X[['Age']])
         return self 
         
     def transform(self, X, y=None):
-        X = X.copy()  # To avoid setting a value on a copy of a slice from a DataFrame warning
+        X = X.copy()  # Avoiding setting value on a copy warning
         X['Age'] = self.ageImputer.transform(X[['Age']])
         X['CabinClass'] = X['Cabin'].fillna('M').apply(lambda x: str(x).replace(" ", "")).apply(lambda x: re.sub(r'[^a-zA-Z]', '', x))
         X['CabinNumber'] = X['Cabin'].fillna('M').apply(lambda x: str(x).replace(" ", "")).apply(lambda x: re.sub(r'[^0-9]', '', x)).replace('', 0) 
