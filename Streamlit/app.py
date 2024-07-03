@@ -5,7 +5,10 @@ import numpy as np
 import pandas as pd
 import joblib
 
-model = joblib.load('xgbpipe.joblib')
+# Load the model from the uploaded path
+model_path = '/mnt/data/xgbpipe.joblib'
+model = joblib.load(model_path)
+
 st.title('Did they make it through? :ship:')
 
 # Input fields
