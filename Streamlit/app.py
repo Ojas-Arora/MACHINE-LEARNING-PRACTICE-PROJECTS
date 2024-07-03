@@ -1,3 +1,34 @@
+# utils.py
+import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+class PrepProcesor:
+    def __init__(self):
+        self.ageImputer = SimpleImputer(strategy='mean')
+        self.fareImputer = SimpleImputer(strategy='mean')
+        self.encoder = OneHotEncoder()
+        self.scaler = StandardScaler()
+
+        self.preprocessor = ColumnTransformer(
+            transformers=[
+                ('num', Pipeline(steps=[
+                    ('imputer', SimpleImputer(strategy='mean')),
+                    ('scaler', StandardScaler())]), ['Age', 'Fare']),
+                ('cat', Pipeline(steps=[
+                    ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+                    ('onehot', OneHotEncoder(handle_unknown='ignore'))]), ['Sex', 'Embarked'])
+            ])
+
+    def fit(self, X):
+        self.preprocessor.fit(X)
+
+    def transform(self, X):
+        return self.preprocessor.transform(X)
+
+# app.py
 import streamlit as st
 from utils import PrepProcesor, columns
 import os
@@ -10,13 +41,68 @@ import joblib
 model_path = './xgbpipe.joblib'
 model = joblib.load(model_path)
 
+# Set the page config
+st.set_page_config(page_title='Passenger Survival Prediction', layout='wide')
+
+# Custom CSS for styling
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f0f2f6;
+        color: #333;
+        font-family: 'Roboto', sans-serif;
+    }
+    .block-container {
+        padding: 2rem;
+    }
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        border: none;
+        cursor: pointer;
+    }
+    .stButton>button:hover {
+        background-color: #45a049;
+    }
+    .stTextInput>div>div>input {
+        font-size: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid #ccc;
+    }
+    .stSelectbox>div>div>select {
+        font-size: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid #ccc;
+    }
+    .stSlider>div>div>div>div>div>div {
+        font-size: 1rem;
+    }
+    .stNumberInput>div>div>input {
+        font-size: 1rem;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border: 1px solid #ccc;
+    }
+    .stAlert {
+        font-size: 1.2rem;
+        padding: 1rem;
+        border-radius: 0.25rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
 st.title('Did they make it through? :ship:')
 
 # Input fields
 passengerid = st.text_input("PASSENGER ID ENTRY", '123456')
-pclass = st.selectbox("CLASS SELECTION", [1,2,3])
+pclass = st.selectbox("CLASS SELECTION", [1, 2, 3])
 name = st.text_input("PASSENGER NAME ENTRY", 'Jason Brown')
-sex = st.select_slider("SEXUAL IDENTITY", ['male','female'])
+sex = st.select_slider("SEXUAL IDENTITY", ['male', 'female'])
 age = st.slider("YOUR AGE", 0, 100)
 sibsp = st.slider("SIBLINGS SELECTION", 0, 10)
 parch = st.slider("PARENTS/CHILDREN ONBOARD", 0, 2)
@@ -29,6 +115,7 @@ def predict():
     row = [passengerid, pclass, name, sex, age, sibsp, parch, ticket, fare, cabin, embarked]
     X = pd.DataFrame([row], columns=columns)
     preprocessor = PrepProcesor()
+    preprocessor.fit(X)  # Fit the preprocessor
     X = preprocessor.transform(X)
     prediction = model.predict(X)
     if prediction[0] == 1:
