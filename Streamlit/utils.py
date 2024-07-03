@@ -1,22 +1,28 @@
-from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd
 from sklearn.impute import SimpleImputer
-import re
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
-class PrepProcesor(BaseEstimator, TransformerMixin):
+class PrepProcesor:
     def __init__(self):
         self.ageImputer = SimpleImputer(strategy='mean')
-        
-    def fit(self, X, y=None):
-        self.ageImputer.fit(X[['Age']])
-        return self
-        
-    def transform(self, X, y=None):
-        X = X.copy()  # Avoiding setting value on a copy warning
-        X['Age'] = self.ageImputer.transform(X[['Age']])
-        X['CabinClass'] = X['Cabin'].fillna('M').apply(lambda x: str(x).replace(" ", "")).apply(lambda x: re.sub(r'[^a-zA-Z]', '', x))
-        X['CabinNumber'] = X['Cabin'].fillna('M').apply(lambda x: str(x).replace(" ", "")).apply(lambda x: re.sub(r'[^0-9]', '', x)).replace('', 0)
-        X['Embarked'] = X['Embarked'].fillna('M')
-        X = X.drop(['PassengerId', 'Name', 'Ticket', 'Cabin'], axis=1)
-        return X
+        self.fareImputer = SimpleImputer(strategy='mean')
+        self.encoder = OneHotEncoder()
+        self.scaler = StandardScaler()
 
-columns = ['PassengerId', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp', 'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked']
+        self.preprocessor = ColumnTransformer(
+            transformers=[
+                ('num', Pipeline(steps=[
+                    ('imputer', SimpleImputer(strategy='mean')),
+                    ('scaler', StandardScaler())]), ['Age', 'Fare']),
+                ('cat', Pipeline(steps=[
+                    ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+                    ('onehot', OneHotEncoder(handle_unknown='ignore'))]), ['Sex', 'Embarked'])
+            ])
+
+    def fit(self, X):
+        self.preprocessor.fit(X)
+
+    def transform(self, X):
+        return self.preprocessor.transform(X)
