@@ -27,3 +27,14 @@ Timeliness: Collecting and updating data in real-time requires robust infrastruc
 Standardization: Harmonizing data formats and methodologies across different regions and sources is essential for meaningful comparisons.
 Privacy and Security: Protecting sensitive data while maintaining transparency and accessibility.
 Political and Economic Factors: Addressing the political and economic implications of emissions reduction efforts, which can vary widely between regions and sectors.
+
+U can run the following project by making the .ipynb file on jupyter notebook and by using the jupyter notebook in the same directory where your .ipynb file is present 
+otherwise u would need to use the cd command to bring the terminal to the same directory where .ipynb file is present.
+In the Terminal you need to run the following command
+panel serve yoyrfile_name.ipynb
+
+This command will give you the link to run the file in local ( http://localhost:5006/yourfile_name )
+By clicking on this link you can see your file in local.
+
+
+
