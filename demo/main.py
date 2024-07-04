@@ -1,15 +1,12 @@
 import streamlit as st
 import numpy as np
-
 import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
-
 from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
-
 from sklearn.metrics import accuracy_score
 
 st.title('Streamlit Example')
@@ -19,17 +16,11 @@ st.write("""
 Which one is the best?
 """)
 
-dataset_name = st.sidebar.selectbox(
-    'Select Dataset',
-    ('Iris', 'Breast Cancer', 'Wine')
-)
+dataset_name = st.sidebar.selectbox('Select Dataset', ('Iris', 'Breast Cancer', 'Wine'))
 
 st.write(f"## {dataset_name} Dataset")
 
-classifier_name = st.sidebar.selectbox(
-    'Select classifier',
-    ('KNN', 'SVM', 'Random Forest')
-)
+classifier_name = st.sidebar.selectbox('Select classifier', ('KNN', 'SVM', 'Random Forest'))
 
 def get_dataset(name):
     data = None
@@ -71,13 +62,10 @@ def get_classifier(clf_name, params):
     elif clf_name == 'KNN':
         clf = KNeighborsClassifier(n_neighbors=params['K'])
     else:
-        clf = RandomForestClassifier(n_estimators=params['n_estimators'], 
-                                     max_depth=params['max_depth'], 
-                                     random_state=1234)
+        clf = RandomForestClassifier(n_estimators=params['n_estimators'], max_depth=params['max_depth'], random_state=1234)
     return clf
 
 clf = get_classifier(classifier_name, params)
-#### CLASSIFICATION ####
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1234)
 
@@ -89,8 +77,6 @@ acc = accuracy_score(y_test, y_pred)
 st.write(f'Classifier = {classifier_name}')
 st.write(f'Accuracy =', acc)
 
-#### PLOT DATASET ####
-# Project the data onto the 2 primary principal components
 pca = PCA(2)
 X_projected = pca.fit_transform(X)
 
