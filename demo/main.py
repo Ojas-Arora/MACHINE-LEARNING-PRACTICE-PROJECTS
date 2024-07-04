@@ -1,5 +1,5 @@
-import streamlit as st 
-import numpy as np 
+import streamlit as st
+import numpy as np
 
 import matplotlib.pyplot as plt
 from sklearn import datasets
@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score
 st.title('Streamlit Example')
 
 st.write("""
-# Explore different classifier and datasets
+# Explore different classifiers and datasets
 Which one is the best?
 """)
 
@@ -45,7 +45,7 @@ def get_dataset(name):
 
 X, y = get_dataset(dataset_name)
 st.write('Shape of dataset:', X.shape)
-st.write('number of classes:', len(np.unique(y)))
+st.write('Number of classes:', len(np.unique(y)))
 
 def add_parameter_ui(clf_name):
     params = dict()
@@ -71,8 +71,9 @@ def get_classifier(clf_name, params):
     elif clf_name == 'KNN':
         clf = KNeighborsClassifier(n_neighbors=params['K'])
     else:
-        clf = clf = RandomForestClassifier(n_estimators=params['n_estimators'], 
-            max_depth=params['max_depth'], random_state=1234)
+        clf = RandomForestClassifier(n_estimators=params['n_estimators'], 
+                                     max_depth=params['max_depth'], 
+                                     random_state=1234)
     return clf
 
 clf = get_classifier(classifier_name, params)
@@ -97,13 +98,9 @@ x1 = X_projected[:, 0]
 x2 = X_projected[:, 1]
 
 fig = plt.figure()
-plt.scatter(x1, x2,
-        c=y, alpha=0.8,
-        cmap='viridis')
-
+plt.scatter(x1, x2, c=y, alpha=0.8, cmap='viridis')
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
 plt.colorbar()
 
-#plt.show()
 st.pyplot(fig)
