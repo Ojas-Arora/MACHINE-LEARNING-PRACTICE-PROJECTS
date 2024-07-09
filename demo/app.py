@@ -12,7 +12,7 @@ def load_lottiefile(filepath: str):
         return json.load(f)
 
 # Verify the file exists before attempting to load
-csv_file_path = 'netflix_titles.csv'
+csv_file_path = "netflix_titles.csv"
 if not os.path.isfile(csv_file_path):
     st.error(f"File {csv_file_path} not found. Please ensure the file is in the correct directory.")
 else:
