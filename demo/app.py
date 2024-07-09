@@ -11,7 +11,7 @@ def load_lottiefile(filepath: str):
         return json.load(f)
 
 # Load Netflix data
-netflix_data = pd.read_csv('netflix_titles.csv')
+netflix_data = pd.read_csv('netflix_titles.csv')  # Ensure this path is correct
 
 # Fill missing descriptions with empty strings
 netflix_data['description'] = netflix_data['description'].fillna('')
