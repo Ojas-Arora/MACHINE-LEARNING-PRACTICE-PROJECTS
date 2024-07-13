@@ -1,18 +1,9 @@
-import os
-import subprocess
-import sys
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import os
 import warnings
-
 warnings.filterwarnings('ignore')
-
-# Ensure xlrd is installed
-try:
-    import xlrd
-except ImportError:
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "xlrd>=2.0.1"])
 
 st.set_page_config(page_title="Superstore!!!", page_icon=":bar_chart:", layout="wide")
 
