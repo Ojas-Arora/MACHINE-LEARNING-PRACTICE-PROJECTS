@@ -20,7 +20,7 @@ if fl is not None:
     else:
         df = pd.read_excel(fl, encoding="ISO-8859-1")
 else:
-    os.chdir(r"C:\Users\hp\MACHINE-LEARNING-PROJECTS\demo")
+    os.chdir(r"C:\Users\hp\MACHINE-LEARNING-PROJECTS")
     df = pd.read_excel("Sample-Superstore.xls", encoding="ISO-8859-1")
 
 col1, col2 = st.columns((2))
