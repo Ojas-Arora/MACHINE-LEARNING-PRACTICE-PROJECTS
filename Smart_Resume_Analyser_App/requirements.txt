@@ -9,5 +9,4 @@ streamlit-tags
 Pillow
 youtube-dl
 nltk
-pdfminer3
-spacy==2.3.5
+spacy==2.3.5  # Adjust version if needed
