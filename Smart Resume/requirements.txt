@@ -9,4 +9,4 @@ streamlit-tags
 Pillow
 youtube-dl
 nltk
-spacy>=3.0.0  # Updated to a newer version
+spacy==2.3.5  # Adjust version if needed
